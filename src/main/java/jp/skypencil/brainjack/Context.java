@@ -26,8 +26,8 @@ class Context {
 	InputStream input;
 	OutputStream output;
 
-	private Context(byte[] commands, InputStream input, OutputStream output) {
-		this.commands = checkNotNull(commands);
+	private Context(String commands, InputStream input, OutputStream output) throws UnsupportedEncodingException {
+		this.commands = checkNotNull(commands).getBytes("UTF-8");
 		this.input = checkNotNull(input);
 		this.output = checkNotNull(output);
 	}
@@ -35,7 +35,7 @@ class Context {
 	@Nonnull
 	static Context create(@Nonnull String commands, @Nonnull InputStream input, @Nonnull OutputStream output) {
 		try {
-			return new Context(commands.getBytes("UTF-8"), input, output);
+			return new Context(commands, input, output);
 		} catch (UnsupportedEncodingException unreachable) {
 			throw new AssertionError(unreachable);
 		}
