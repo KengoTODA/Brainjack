@@ -5,7 +5,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-public class Context {
+class Context {
 	@Override
 	public String toString() {
 		return "Context [instructionPointer=" + instructionPointer

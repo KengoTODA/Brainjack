@@ -1,5 +1,7 @@
 package jp.skypencil.brainjack;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,7 +19,11 @@ public class Interpreter {
 		}
 	}
 
-	Context execute(String commands, InputStream input, OutputStream output) throws IOException {
+	public Context execute(String commands, InputStream input, OutputStream output) throws IOException {
+		checkNotNull(commands);
+		checkNotNull(input);
+		checkNotNull(output);
+
 		Context context = Context.create(commands, input, output);
 		while (context.instructionPointer < commands.length()) {
 			byte byteData = context.commands[context.instructionPointer];
