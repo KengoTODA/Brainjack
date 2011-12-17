@@ -1,9 +1,13 @@
 package jp.skypencil.brainjack;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+
+import javax.annotation.Nonnull;
 
 class Context {
 	@Override
@@ -23,12 +27,13 @@ class Context {
 	OutputStream output;
 
 	private Context(byte[] commands, InputStream input, OutputStream output) {
-		this.commands = commands;
-		this.input = input;
-		this.output = output;
+		this.commands = checkNotNull(commands);
+		this.input = checkNotNull(input);
+		this.output = checkNotNull(output);
 	}
 
-	static Context create(String commands, InputStream input, OutputStream output) {
+	@Nonnull
+	static Context create(@Nonnull String commands, @Nonnull InputStream input, @Nonnull OutputStream output) {
 		try {
 			return new Context(commands.getBytes("UTF-8"), input, output);
 		} catch (UnsupportedEncodingException unreachable) {

@@ -2,6 +2,9 @@ package jp.skypencil.brainjack;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 enum Command {
 	INCREMENT_DATA_POINTER {
 		@Override
@@ -150,6 +153,8 @@ enum Command {
 
 	private static final char CHAR_START_LOOP = '[';
 	private static final char CHAR_END_LOOP = ']';
+
+	@Nonnegative
 	abstract byte getCharacter();
-	abstract void execute(Context context) throws IOException;
+	abstract void execute(@Nonnull Context context) throws IOException;
 }
