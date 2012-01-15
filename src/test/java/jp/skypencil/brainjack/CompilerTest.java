@@ -46,7 +46,7 @@ public class CompilerTest extends AbstractTest {
 		byte[] binary = compiler.compile(commands, DUMMY_CLASS_NAME);
 
 		// for javap debug
-		Files.write(binary, new File(testName.getMethodName() + ".class"));
+		Files.write(binary, new File("target", testName.getMethodName() + ".class"));
 
 		Class<?> clazz = new OriginalClassLoader().defineClass(DUMMY_CLASS_NAME, binary);
 		Method method = clazz.getMethod("main", String[].class);
