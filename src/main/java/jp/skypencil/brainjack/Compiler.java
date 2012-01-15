@@ -23,7 +23,7 @@ public class Compiler {
 	private final Logger logger = Logger.getLogger(getClass().getName());
 
 	@Nonnull
-	byte[] compile(@Nonnull String commands, @Nonnull String classFullName) {
+	public byte[] compile(@Nonnull String commands, @Nonnull String classFullName) {
 		checkNotNull(commands);
 		checkNotNull(classFullName);
 		String innerFullClassName = classFullName.replaceAll("\\.", "/");
