@@ -2,14 +2,14 @@ package jp.skypencil.brainjack;
 
 import java.io.IOException;
 
-import jp.skypencil.brainjack.Command.ACCEPT;
-import jp.skypencil.brainjack.Command.DECREMENT_DATA;
-import jp.skypencil.brainjack.Command.DECREMENT_DATA_POINTER;
-import jp.skypencil.brainjack.Command.END_LOOP;
-import jp.skypencil.brainjack.Command.INCREMENT_DATA;
-import jp.skypencil.brainjack.Command.INCREMENT_DATA_POINTER;
-import jp.skypencil.brainjack.Command.OUTPUT;
-import jp.skypencil.brainjack.Command.START_LOOP;
+import jp.skypencil.brainjack.Command.Accept;
+import jp.skypencil.brainjack.Command.DecrementData;
+import jp.skypencil.brainjack.Command.DecrementDataPointer;
+import jp.skypencil.brainjack.Command.EndLoop;
+import jp.skypencil.brainjack.Command.IncrementData;
+import jp.skypencil.brainjack.Command.IncrementDataPointer;
+import jp.skypencil.brainjack.Command.Output;
+import jp.skypencil.brainjack.Command.StartLoop;
 import static jp.skypencil.brainjack.Command.CHAR_START_LOOP;
 import static jp.skypencil.brainjack.Command.CHAR_END_LOOP;
 
@@ -21,7 +21,7 @@ public class InterpreterVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(START_LOOP start_LOOP) {
+	public void visit(StartLoop start_LOOP) {
 		byte data = context.array[context.dataPointer];
 		if (data == 0) {
 			jumpForward(context);
@@ -31,7 +31,7 @@ public class InterpreterVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(END_LOOP end_LOOP) {
+	public void visit(EndLoop end_LOOP) {
 		byte data = context.array[context.dataPointer];
 		if (data != 0) {
 			jumpBack(context);
@@ -41,7 +41,7 @@ public class InterpreterVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(ACCEPT accept) throws IOException {
+	public void visit(Accept accept) throws IOException {
 		byte data = (byte) context.input.read();
 		if (data == -1) {
 			data = 0;
@@ -51,32 +51,32 @@ public class InterpreterVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(OUTPUT output) throws IOException {
+	public void visit(Output output) throws IOException {
 		byte data = context.array[context.dataPointer];
 		context.output.write(data);
 		context.instructionPointer++;
 	}
 
 	@Override
-	public void visit(DECREMENT_DATA decrement_DATA) {
+	public void visit(DecrementData decrement_DATA) {
 		context.array[context.dataPointer]--;
 		context.instructionPointer++;
 	}
 
 	@Override
-	public void visit(INCREMENT_DATA increment_DATA) {
+	public void visit(IncrementData increment_DATA) {
 		context.array[context.dataPointer]++;
 		context.instructionPointer++;
 	}
 
 	@Override
-	public void visit(DECREMENT_DATA_POINTER decrement_DATA_POINTER) {
+	public void visit(DecrementDataPointer decrement_DATA_POINTER) {
 		context.dataPointer--;
 		context.instructionPointer++;
 	}
 
 	@Override
-	public void visit(INCREMENT_DATA_POINTER increment_DATA_POINTER) {
+	public void visit(IncrementDataPointer increment_DATA_POINTER) {
 		context.dataPointer++;
 		context.instructionPointer++;
 	}

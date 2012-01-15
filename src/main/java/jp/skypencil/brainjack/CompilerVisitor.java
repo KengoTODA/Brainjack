@@ -27,14 +27,14 @@ import java.util.Deque;
 
 import javax.annotation.Nonnull;
 
-import jp.skypencil.brainjack.Command.ACCEPT;
-import jp.skypencil.brainjack.Command.DECREMENT_DATA;
-import jp.skypencil.brainjack.Command.DECREMENT_DATA_POINTER;
-import jp.skypencil.brainjack.Command.END_LOOP;
-import jp.skypencil.brainjack.Command.INCREMENT_DATA;
-import jp.skypencil.brainjack.Command.INCREMENT_DATA_POINTER;
-import jp.skypencil.brainjack.Command.OUTPUT;
-import jp.skypencil.brainjack.Command.START_LOOP;
+import jp.skypencil.brainjack.Command.Accept;
+import jp.skypencil.brainjack.Command.DecrementData;
+import jp.skypencil.brainjack.Command.DecrementDataPointer;
+import jp.skypencil.brainjack.Command.EndLoop;
+import jp.skypencil.brainjack.Command.IncrementData;
+import jp.skypencil.brainjack.Command.IncrementDataPointer;
+import jp.skypencil.brainjack.Command.Output;
+import jp.skypencil.brainjack.Command.StartLoop;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
@@ -68,7 +68,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(START_LOOP start_LOOP) {
+	public void visit(StartLoop start_LOOP) {
 		Label loopStart = new Label();
 		Label loopEnd = new Label();
 		methodVisitor.visitLabel(loopStart);
@@ -81,7 +81,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(END_LOOP end_LOOP) {
+	public void visit(EndLoop end_LOOP) {
 		if (loopBeginLabels.isEmpty()) {
 			methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_ARRAY, DATA_ARRAY_TYPE);
 			methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
@@ -105,7 +105,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(ACCEPT accept) {
+	public void visit(Accept accept) {
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_ARRAY, DATA_ARRAY_TYPE);
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
 		methodVisitor.visitFieldInsn(GETSTATIC, "java/lang/System", "in", Type.getDescriptor(InputStream.class));
@@ -122,7 +122,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(OUTPUT output) {
+	public void visit(Output output) {
 		methodVisitor.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_ARRAY, DATA_ARRAY_TYPE);
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
@@ -131,7 +131,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(DECREMENT_DATA decrement_DATA) {
+	public void visit(DecrementData decrement_DATA) {
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_ARRAY, DATA_ARRAY_TYPE);
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
 		methodVisitor.visitInsn(DUP2);
@@ -142,7 +142,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(INCREMENT_DATA increment_DATA) {
+	public void visit(IncrementData increment_DATA) {
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_ARRAY, DATA_ARRAY_TYPE);
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
 		methodVisitor.visitInsn(DUP2);
@@ -153,7 +153,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(DECREMENT_DATA_POINTER decrement_DATA_POINTER) {
+	public void visit(DecrementDataPointer decrement_DATA_POINTER) {
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
 		methodVisitor.visitInsn(ICONST_1);
 		methodVisitor.visitInsn(ISUB);
@@ -161,7 +161,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(INCREMENT_DATA_POINTER increment_DATA_POINTER) {
+	public void visit(IncrementDataPointer increment_DATA_POINTER) {
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
 		methodVisitor.visitInsn(ICONST_1);
 		methodVisitor.visitInsn(IADD);

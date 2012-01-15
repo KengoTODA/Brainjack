@@ -8,17 +8,17 @@ import javax.annotation.Nonnull;
 abstract class Command {
 	static Command[] values() {
 		return new Command[] {
-				new INCREMENT_DATA(),
-				new INCREMENT_DATA_POINTER(),
-				new ACCEPT(),
-				new DECREMENT_DATA(),
-				new DECREMENT_DATA_POINTER(),
-				new END_LOOP(),
-				new OUTPUT(),
-				new START_LOOP()
+				new IncrementData(),
+				new IncrementDataPointer(),
+				new Accept(),
+				new DecrementData(),
+				new DecrementDataPointer(),
+				new EndLoop(),
+				new Output(),
+				new StartLoop()
 		};
 	}
-	static class INCREMENT_DATA_POINTER extends Command {
+	static class IncrementDataPointer extends Command {
 		@Override
 		byte getCharacter() {
 			return '>';
@@ -29,7 +29,7 @@ abstract class Command {
 			visitor.visit(this);
 		}
 	};
-	static class  DECREMENT_DATA_POINTER extends Command {
+	static class  DecrementDataPointer extends Command {
 		@Override
 		byte getCharacter() {
 			return '<';
@@ -40,7 +40,7 @@ abstract class Command {
 			visitor.visit(this);
 		}
 	};
-	static class INCREMENT_DATA extends Command {
+	static class IncrementData extends Command {
 		@Override
 		byte getCharacter() {
 			return '+';
@@ -51,7 +51,7 @@ abstract class Command {
 			visitor.visit(this);
 		}
 	};
-	static class DECREMENT_DATA extends Command {
+	static class DecrementData extends Command {
 		@Override
 		byte getCharacter() {
 			return '-';
@@ -62,7 +62,7 @@ abstract class Command {
 			visitor.visit(this);
 		}
 	};
-	static class OUTPUT extends Command {
+	static class Output extends Command {
 		@Override
 		byte getCharacter() {
 			return '.';
@@ -73,7 +73,7 @@ abstract class Command {
 			visitor.visit(this);
 		}
 	};
-	static class ACCEPT extends Command {
+	static class Accept extends Command {
 		@Override
 		byte getCharacter() {
 			return ',';
@@ -84,7 +84,7 @@ abstract class Command {
 			visitor.visit(this);
 		}
 	};
-	static class START_LOOP extends Command {
+	static class StartLoop extends Command {
 		@Override
 		byte getCharacter() {
 			return CHAR_START_LOOP;
@@ -95,7 +95,7 @@ abstract class Command {
 			visitor.visit(this);
 		}
 	};
-	static class END_LOOP extends Command {
+	static class EndLoop extends Command {
 		@Override
 		byte getCharacter() {
 			return CHAR_END_LOOP;
