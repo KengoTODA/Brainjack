@@ -9,6 +9,18 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	<scm>
+		<connection>scm:git://github.com/eller86/Brainjack.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/Brainjack.git</developerConnection>
+		<url>https://github.com/eller86/brainjack</url>
+	</scm>
+	<developers>
+		<developer>
+			<id>eller86</id>
+			<name>Kengo TODA</name>
+			<url>http://skypencil.jp/</url>
+		</developer>
+	</developers>
 	<build>
 		<plugins>
 			<plugin>
@@ -68,4 +80,10 @@
 			<version>2.0.19</version>
 		</dependency>
 	</dependencies>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
 </project>
