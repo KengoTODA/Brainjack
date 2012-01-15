@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import jp.skypencil.brainjack.AbstractTest;
-import jp.skypencil.brainjack.Context;
 import jp.skypencil.brainjack.Interpreter;
 
 public class InterpreterTest extends AbstractTest {
@@ -16,8 +15,7 @@ public class InterpreterTest extends AbstractTest {
 		Interpreter interpreter = new Interpreter();
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-		Context context = interpreter.execute(commands, input, output);
-		System.out.println(context);
+		interpreter.execute(commands, input, output);
 		return output.toString("UTF-8");
 	}
 
