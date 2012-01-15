@@ -21,7 +21,7 @@ public class InterpreterVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(StartLoop start_LOOP) {
+	public void visit(StartLoop startLoop) {
 		byte data = context.array[context.dataPointer];
 		if (data == 0) {
 			jumpForward(context);
@@ -31,7 +31,7 @@ public class InterpreterVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(EndLoop end_LOOP) {
+	public void visit(EndLoop endLoop) {
 		byte data = context.array[context.dataPointer];
 		if (data != 0) {
 			jumpBack(context);
@@ -58,25 +58,25 @@ public class InterpreterVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(DecrementData decrement_DATA) {
+	public void visit(DecrementData decrementData) {
 		context.array[context.dataPointer]--;
 		context.instructionPointer++;
 	}
 
 	@Override
-	public void visit(IncrementData increment_DATA) {
+	public void visit(IncrementData incrementData) {
 		context.array[context.dataPointer]++;
 		context.instructionPointer++;
 	}
 
 	@Override
-	public void visit(DecrementDataPointer decrement_DATA_POINTER) {
+	public void visit(DecrementDataPointer decrementDataPointer) {
 		context.dataPointer--;
 		context.instructionPointer++;
 	}
 
 	@Override
-	public void visit(IncrementDataPointer increment_DATA_POINTER) {
+	public void visit(IncrementDataPointer incrementDataPointer) {
 		context.dataPointer++;
 		context.instructionPointer++;
 	}

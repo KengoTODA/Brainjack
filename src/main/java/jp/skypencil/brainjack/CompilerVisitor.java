@@ -70,7 +70,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(StartLoop start_LOOP) {
+	public void visit(StartLoop startLoop) {
 		Label loopStart = new Label();
 		Label loopEnd = new Label();
 		methodVisitor.visitLabel(loopStart);
@@ -83,7 +83,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(EndLoop end_LOOP) {
+	public void visit(EndLoop endLoop) {
 		if (loopBeginLabels.isEmpty()) {
 			methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_ARRAY, DATA_ARRAY_TYPE);
 			methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
@@ -133,7 +133,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(DecrementData decrement_DATA) {
+	public void visit(DecrementData decrementData) {
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_ARRAY, DATA_ARRAY_TYPE);
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
 		methodVisitor.visitInsn(DUP2);
@@ -144,7 +144,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(IncrementData increment_DATA) {
+	public void visit(IncrementData incrementData) {
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_ARRAY, DATA_ARRAY_TYPE);
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
 		methodVisitor.visitInsn(DUP2);
@@ -155,7 +155,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(DecrementDataPointer decrement_DATA_POINTER) {
+	public void visit(DecrementDataPointer decrementDataPointer) {
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
 		methodVisitor.visitInsn(ICONST_1);
 		methodVisitor.visitInsn(ISUB);
@@ -163,7 +163,7 @@ class CompilerVisitor implements Visitor {
 	}
 
 	@Override
-	public void visit(IncrementDataPointer increment_DATA_POINTER) {
+	public void visit(IncrementDataPointer incrementDataPointer) {
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
 		methodVisitor.visitInsn(ICONST_1);
 		methodVisitor.visitInsn(IADD);
