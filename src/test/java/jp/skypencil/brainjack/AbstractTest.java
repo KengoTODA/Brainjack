@@ -6,15 +6,21 @@ import static org.junit.Assert.assertThat;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Test;
 
 import com.google.common.base.Strings;
 
 public abstract class AbstractTest {
-	protected abstract String execute(String commands, InputStream input) throws IOException;
+	protected abstract String execute(String commands, InputStream input) throws IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+
 	private String execute(String commands) throws IOException {
-		return execute(commands, new ByteArrayInputStream(new byte[0]));
+		try {
+			return execute(commands, new ByteArrayInputStream(new byte[0]));
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private static final String CMD_HELLO_WORLD = "+++++++++[>++++++++>+++++++++++>+++++<<<-]>.>++.+++++++..+++.>-.------------.<++++++++.--------.+++.------.--------.>+.";
@@ -45,13 +51,13 @@ public abstract class AbstractTest {
 	}
 
 	@Test
-	public void testReverse() throws IOException {
+	public void testReverse() throws IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		InputStream input = new ByteArrayInputStream("abcde".getBytes("UTF-8"));
 		assertThat(execute(">,[>,]<[.<]", input), equalTo("edcba"));
 	}
 
 	@Test
-	public void testUpperCase() throws IOException {
+	public void testUpperCase() throws IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		InputStream input = new ByteArrayInputStream("abcde".getBytes("UTF-8"));
 		assertThat(execute(",[" + Strings.repeat("-", 32) + ".,]", input), equalTo("ABCDE"));
 	}
