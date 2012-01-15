@@ -1,5 +1,7 @@
 package jp.skypencil.brainjack;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -10,7 +12,9 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Maps;
 
 abstract class Command {
-	private static Map<Byte, Command> map;
+	private static final Map<Byte, Command> map;
+
+	@Nonnull
 	static Command[] values() {
 		return new Command[] {
 				new IncrementData(),
@@ -38,90 +42,98 @@ abstract class Command {
 
 	static class IncrementDataPointer extends Command {
 		@Override
+		@Nonnegative
 		byte getCharacter() {
 			return '>';
 		}
 
 		@Override
-		void accept(Visitor visitor) {
-			visitor.visit(this);
+		void accept(@Nonnull Visitor visitor) {
+			checkNotNull(visitor).visit(this);
 		}
 	};
 	static class  DecrementDataPointer extends Command {
 		@Override
+		@Nonnegative
 		byte getCharacter() {
 			return '<';
 		}
 
 		@Override
-		void accept(Visitor visitor) {
-			visitor.visit(this);
+		void accept(@Nonnull Visitor visitor) {
+			checkNotNull(visitor).visit(this);
 		}
 	};
 	static class IncrementData extends Command {
 		@Override
+		@Nonnegative
 		byte getCharacter() {
 			return '+';
 		}
 
 		@Override
-		void accept(Visitor visitor) {
-			visitor.visit(this);
+		void accept(@Nonnull Visitor visitor) {
+			checkNotNull(visitor).visit(this);
 		}
 	};
 	static class DecrementData extends Command {
 		@Override
+		@Nonnegative
 		byte getCharacter() {
 			return '-';
 		}
 
 		@Override
-		void accept(Visitor visitor) {
-			visitor.visit(this);
+		void accept(@Nonnull Visitor visitor) {
+			checkNotNull(visitor).visit(this);
 		}
 	};
 	static class Output extends Command {
 		@Override
+		@Nonnegative
 		byte getCharacter() {
 			return '.';
 		}
 
 		@Override
-		void accept(Visitor visitor) throws IOException {
-			visitor.visit(this);
+		void accept(@Nonnull Visitor visitor) throws IOException {
+			checkNotNull(visitor).visit(this);
 		}
 	};
 	static class Accept extends Command {
 		@Override
+		@Nonnegative
 		byte getCharacter() {
 			return ',';
 		}
 
 		@Override
-		void accept(Visitor visitor) throws IOException {
-			visitor.visit(this);
+		void accept(@Nonnull Visitor visitor) throws IOException {
+			checkNotNull(visitor).visit(this);
 		}
 	};
 	static class StartLoop extends Command {
 		@Override
+		@Nonnegative
 		byte getCharacter() {
 			return CHAR_START_LOOP;
 		}
 
 		@Override
-		void accept(Visitor visitor) {
-			visitor.visit(this);
+		void accept(@Nonnull Visitor visitor) {
+			checkNotNull(visitor).visit(this);
 		}
 	};
 	static class EndLoop extends Command {
 		@Override
+		@Nonnegative
 		byte getCharacter() {
 			return CHAR_END_LOOP;
 		}
 
 		@Override
-		void accept(Visitor visitor) {
-			visitor.visit(this);
+		void accept(@Nonnull Visitor visitor) {
+			checkNotNull(visitor).visit(this);
 		}
 	};
 
