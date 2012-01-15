@@ -1,11 +1,16 @@
 package jp.skypencil.brainjack;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.google.common.collect.Maps;
 
 abstract class Command {
+	private static Map<Byte, Command> map;
 	static Command[] values() {
 		return new Command[] {
 				new IncrementData(),
@@ -18,6 +23,19 @@ abstract class Command {
 				new StartLoop()
 		};
 	}
+
+	static {
+		map = Maps.newHashMap();
+		for (Command command : values()) {
+			map.put(command.getCharacter(), command);
+		}
+	}
+
+	@Nullable
+	static Command fromByte(@Nonnegative byte byteData) {
+		return map.get(Byte.valueOf(byteData));
+	}
+
 	static class IncrementDataPointer extends Command {
 		@Override
 		byte getCharacter() {

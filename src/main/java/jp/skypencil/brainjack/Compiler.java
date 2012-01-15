@@ -9,6 +9,7 @@ import static org.objectweb.asm.Opcodes.RETURN;
 import static org.objectweb.asm.Opcodes.V1_5;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
 
@@ -19,6 +20,9 @@ import org.objectweb.asm.Type;
 import com.google.common.base.Charsets;
 
 public class Compiler {
+	private final Logger logger = Logger.getLogger(getClass().getName());
+
+	@Nonnull
 	byte[] compile(@Nonnull String commands, @Nonnull String classFullName) {
 		checkNotNull(commands);
 		checkNotNull(classFullName);
@@ -64,16 +68,16 @@ public class Compiler {
 
 	private void createCommands(CompilerVisitor visitor, String commands,
 			String innerFullClassName) {
-		outer:
-		for (byte c : commands.getBytes(Charsets.UTF_8)) {
-			for (Command command : Command.values()) {
-				if (c == command.getCharacter()) {
-					try {
-						command.accept(visitor);
-					} catch (IOException unreachable) {
-						throw new AssertionError(unreachable);
-					}
-					continue outer;
+		for (byte byteData : commands.getBytes(Charsets.UTF_8)) {
+			Command command = Command.fromByte(byteData);
+			if (command == null) {
+				logger.warning("unknown command: " + Byte.toString(byteData));
+			} else {
+				try {
+					command.accept(visitor);
+				} catch (IOException unreachable) {
+					// CompilerVisitor doesn't throw IOException
+					throw new AssertionError(unreachable);
 				}
 			}
 		}
