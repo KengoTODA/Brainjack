@@ -6,7 +6,7 @@ import static org.objectweb.asm.Opcodes.ACC_STATIC;
 import static org.objectweb.asm.Opcodes.ALOAD;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import static org.objectweb.asm.Opcodes.RETURN;
-import static org.objectweb.asm.Opcodes.V1_5;
+import static org.objectweb.asm.Opcodes.V1_4;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -34,7 +34,7 @@ public class Compiler {
 		}
 
 		ClassWriter cw = new ClassWriter(0);
-		cw.visit(V1_5, ACC_PUBLIC, innerFullClassName, null, "java/lang/Object", null);
+		cw.visit(V1_4, ACC_PUBLIC, innerFullClassName, null, "java/lang/Object", null);
 		createConstructor(cw, innerFullClassName);
 		createMain(cw, commands, innerFullClassName);
 		cw.visitEnd();
