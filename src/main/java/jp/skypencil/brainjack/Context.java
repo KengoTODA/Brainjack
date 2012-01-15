@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import javax.annotation.Nonnull;
 
-class Context {
+public class Context {
 	@Override
 	public String toString() {
 		return "Context [instructionPointer=" + instructionPointer
