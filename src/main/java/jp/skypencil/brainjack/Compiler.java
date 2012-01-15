@@ -1,16 +1,20 @@
 package jp.skypencil.brainjack;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.objectweb.asm.Opcodes.*;
-
-import java.lang.reflect.Method;
-import java.util.EnumSet;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.V1_5;
 
 import javax.annotation.Nonnull;
 
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
+
+import com.google.common.base.Charsets;
 
 public class Compiler {
 	byte[] compile(@Nonnull String commands, @Nonnull String classFullName) {
@@ -26,8 +30,7 @@ public class Compiler {
 		ClassWriter cw = new ClassWriter(0);
 		cw.visit(V1_5, ACC_PUBLIC, innerFullClassName, null, "java/lang/Object", null);
 		createConstructor(cw, innerFullClassName);
-		EnumSet<Command> usedCommand = createMain(cw, commands, innerFullClassName);
-		createMethod(cw, usedCommand);
+		createMain(cw, commands, innerFullClassName);
 		cw.visitEnd();
 
 		return cw.toByteArray();
@@ -43,23 +46,30 @@ public class Compiler {
 		mv.visitEnd();
 	}
 
-	private EnumSet<Command> createMain(ClassWriter cw, String commands,
+	private void createMain(ClassWriter cw, String commands,
 			String innerFullClassName) {
-		// TODO Auto-generated method stub
-		return null;
+		MethodVisitor mv = cw.visitMethod(
+				ACC_PUBLIC | ACC_STATIC,
+				"main",
+				Type.getMethodDescriptor(Type.VOID_TYPE, new Type[]{Type.getObjectType("[Ljava/lang/String;")}),
+				null, new String[]{ Type.getInternalName(Throwable.class) });
+
+		CompilerVisitor visitor = new CompilerVisitor(innerFullClassName, mv);
+		visitor.createField(cw);
+		createCommands(visitor, commands, innerFullClassName);
+		visitor.end();
 	}
 
-	private void createMethod(ClassWriter cw, EnumSet<Command> usedCommand) {
-		for (Command command : usedCommand) {
-			Class<Command> clazz = command.getDeclaringClass();
-			try {
-				Method method = clazz.getDeclaredMethod("execute", Context.class);
-			} catch (SecurityException e) {
-				throw new RuntimeException();
-			} catch (NoSuchMethodException unreachable) {
-				throw new AssertionError(unreachable);
+	private void createCommands(CompilerVisitor visitor, String commands,
+			String innerFullClassName) {
+		outer:
+		for (byte c : commands.getBytes(Charsets.UTF_8)) {
+			for (Command command : Command.values()) {
+				if (c == command.getCharacter()) {
+					command.accept(visitor);
+					continue outer;
+				}
 			}
 		}
 	}
-
 }

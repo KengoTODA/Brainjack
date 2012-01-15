@@ -8,7 +8,7 @@ public class IllegalCommandsException extends RuntimeException {
 
 	private static final long serialVersionUID = -2617294350767892527L;
 
-	IllegalCommandsException(@Nonnull String message) {
+	public IllegalCommandsException(@Nonnull String message) {
 		super(checkNotNull(message));
 	}
 }

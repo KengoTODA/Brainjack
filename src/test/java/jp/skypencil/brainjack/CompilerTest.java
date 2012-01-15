@@ -4,7 +4,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.File;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
@@ -13,12 +13,18 @@ import java.lang.reflect.Modifier;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestName;
+
+import com.google.common.io.Files;
 
 public class CompilerTest extends AbstractTest {
 
 	private static final String DUMMY_CLASS_NAME = "pkg.CompiledClass";
 	private ByteArrayOutputStream byteArray;
 	private PrintStream defaultOutput;
+	@Rule
+	public TestName testName = new TestName();
 
 	@Before
 	public void switchOutput() {
@@ -35,9 +41,13 @@ public class CompilerTest extends AbstractTest {
 
 	@Override
 	protected String execute(String commands, InputStream input)
-			throws IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+			throws Throwable {
 		Compiler compiler = new Compiler();
 		byte[] binary = compiler.compile(commands, DUMMY_CLASS_NAME);
+
+		// for javap debug
+		Files.write(binary, new File(testName.getMethodName() + ".class"));
+
 		Class<?> clazz = new OriginalClassLoader().defineClass(DUMMY_CLASS_NAME, binary);
 		Method method = clazz.getMethod("main", String[].class);
 		assertThat(Modifier.isStatic(method.getModifiers()), is(true));
@@ -47,6 +57,8 @@ public class CompilerTest extends AbstractTest {
 		System.setIn(input);
 		try {
 			method.invoke(null, new Object[] { new String[]{ } });
+		} catch (InvocationTargetException e) {
+			throw e.getCause();
 		} finally {
 			System.setIn(defaultInput);
 		}

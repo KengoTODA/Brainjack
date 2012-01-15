@@ -5,8 +5,20 @@ import java.io.IOException;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
-enum Command {
-	INCREMENT_DATA_POINTER {
+abstract class Command {
+	static Command[] values() {
+		return new Command[] {
+				new INCREMENT_DATA(),
+				new INCREMENT_DATA_POINTER(),
+				new ACCEPT(),
+				new DECREMENT_DATA(),
+				new DECREMENT_DATA_POINTER(),
+				new END_LOOP(),
+				new OUTPUT(),
+				new START_LOOP()
+		};
+	}
+	static class INCREMENT_DATA_POINTER extends Command {
 		@Override
 		byte getCharacter() {
 			return '>';
@@ -17,8 +29,13 @@ enum Command {
 			context.dataPointer++;
 			context.instructionPointer++;
 		}
-	},
-	DECREMENT_DATA_POINTER {
+
+		@Override
+		void accept(Visitor visitor) {
+			visitor.visit(this);
+		}
+	};
+	static class  DECREMENT_DATA_POINTER extends Command {
 		@Override
 		byte getCharacter() {
 			return '<';
@@ -29,8 +46,13 @@ enum Command {
 			context.dataPointer--;
 			context.instructionPointer++;
 		}
-	},
-	INCREMENT_DATA {
+
+		@Override
+		void accept(Visitor visitor) {
+			visitor.visit(this);
+		}
+	};
+	static class INCREMENT_DATA extends Command {
 		@Override
 		byte getCharacter() {
 			return '+';
@@ -41,8 +63,13 @@ enum Command {
 			context.array[context.dataPointer]++;
 			context.instructionPointer++;
 		}
-	},
-	DECREMENT_DATA {
+
+		@Override
+		void accept(Visitor visitor) {
+			visitor.visit(this);
+		}
+	};
+	static class DECREMENT_DATA extends Command {
 		@Override
 		byte getCharacter() {
 			return '-';
@@ -53,8 +80,13 @@ enum Command {
 			context.array[context.dataPointer]--;
 			context.instructionPointer++;
 		}
-	},
-	OUTPUT {
+
+		@Override
+		void accept(Visitor visitor) {
+			visitor.visit(this);
+		}
+	};
+	static class OUTPUT extends Command {
 		@Override
 		byte getCharacter() {
 			return '.';
@@ -66,8 +98,13 @@ enum Command {
 			context.output.write(data);
 			context.instructionPointer++;
 		}
-	},
-	ACCEPT {
+
+		@Override
+		void accept(Visitor visitor) {
+			visitor.visit(this);
+		}
+	};
+	static class ACCEPT extends Command {
 		@Override
 		byte getCharacter() {
 			return ',';
@@ -82,8 +119,13 @@ enum Command {
 			context.array[context.dataPointer] = data;
 			context.instructionPointer++;
 		}
-	},
-	START_LOOP {
+
+		@Override
+		void accept(Visitor visitor) {
+			visitor.visit(this);
+		}
+	};
+	static class START_LOOP extends Command {
 		@Override
 		byte getCharacter() {
 			return CHAR_START_LOOP;
@@ -96,9 +138,6 @@ enum Command {
 				jumpForward(context);
 			} else {
 				context.instructionPointer++;
-				if (context.instructionPointer >= context.commands.length) {
-					throw new IllegalCommandsException("illegal pair of '[' and ']'");
-				}
 			}
 		}
 
@@ -117,8 +156,13 @@ enum Command {
 				}
 			}
 		}
-	},
-	END_LOOP {
+
+		@Override
+		void accept(Visitor visitor) {
+			visitor.visit(this);
+		}
+	};
+	static class END_LOOP extends Command {
 		@Override
 		byte getCharacter() {
 			return CHAR_END_LOOP;
@@ -149,6 +193,11 @@ enum Command {
 				}
 			}
 		}
+
+		@Override
+		void accept(Visitor visitor) {
+			visitor.visit(this);
+		}
 	};
 
 	private static final char CHAR_START_LOOP = '[';
@@ -157,4 +206,5 @@ enum Command {
 	@Nonnegative
 	abstract byte getCharacter();
 	abstract void execute(@Nonnull Context context) throws IOException;
+	abstract void accept(@Nonnull Visitor visitor);
 }
