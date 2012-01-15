@@ -25,13 +25,14 @@ public class Interpreter {
 		checkNotNull(output);
 
 		Context context = Context.create(commands, input, output);
+		InterpreterVisitor visitor = new InterpreterVisitor(context);
 		while (context.instructionPointer < commands.length()) {
 			byte byteData = context.commands[context.instructionPointer];
 			Command command = byteToCommand.get(byteData);
 			if (command == null) {
 				logger.warning("unknown command: " + Byte.toString(byteData));
 			} else {
-				command.execute(context);
+				command.accept(visitor);
 			}
 		}
 

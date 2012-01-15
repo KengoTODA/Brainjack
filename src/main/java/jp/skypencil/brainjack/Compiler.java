@@ -8,6 +8,8 @@ import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import static org.objectweb.asm.Opcodes.RETURN;
 import static org.objectweb.asm.Opcodes.V1_5;
 
+import java.io.IOException;
+
 import javax.annotation.Nonnull;
 
 import org.objectweb.asm.ClassWriter;
@@ -66,7 +68,11 @@ public class Compiler {
 		for (byte c : commands.getBytes(Charsets.UTF_8)) {
 			for (Command command : Command.values()) {
 				if (c == command.getCharacter()) {
-					command.accept(visitor);
+					try {
+						command.accept(visitor);
+					} catch (IOException unreachable) {
+						throw new AssertionError(unreachable);
+					}
 					continue outer;
 				}
 			}
