@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jp.skypencil</groupId>
 	<artifactId>Brainjack</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>Brainjack</name>
 	<description>a Java implementation of the Brainf*ck programming language</description>
 	<properties>
