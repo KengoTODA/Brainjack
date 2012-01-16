@@ -55,7 +55,32 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<updateReleaseInfo>true</updateReleaseInfo>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>source-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav</artifactId>
+				<version>1.0-beta-2</version>
+			</extension>
+		</extensions>
 	</build>
 	<dependencies>
 		<dependency>
@@ -93,4 +118,16 @@
 			<url>http://maven.glassfish.org/content/groups/public/</url>
 		</repository>
 	</repositories>
+	<distributionManagement>
+		<repository>
+			<id>release.eller86.cloudbees.com</id>
+			<uniqueVersion>false</uniqueVersion>
+			<url>dav:https://repository-eller86.forge.cloudbees.com/release</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshot.eller86.cloudbees.com</id>
+			<uniqueVersion>true</uniqueVersion>
+			<url>dav:https://repository-eller86.forge.cloudbees.com/snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
