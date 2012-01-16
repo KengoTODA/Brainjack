@@ -86,4 +86,11 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
 		</license>
 	</licenses>
+	<repositories>
+		<repository>
+			<!-- repository for args4j -->
+			<id>maven.glassfish.org</id>
+			<url>http://maven.glassfish.org/content/groups/public/</url>
+		</repository>
+	</repositories>
 </project>
