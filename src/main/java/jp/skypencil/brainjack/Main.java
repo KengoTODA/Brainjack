@@ -23,7 +23,11 @@ public class Main {
 		Main main = new Main();
 		try {
 			main.run(args);
-		} catch (CmdLineException | IllegalArgumentException e) {
+		} catch (CmdLineException e) {
+			main.printUsage(System.out);
+			e.printStackTrace();
+			statusCode = STATUS_CODE_ERROR;
+		} catch (IllegalArgumentException e) {
 			main.printUsage(System.out);
 			e.printStackTrace();
 			statusCode = STATUS_CODE_ERROR;

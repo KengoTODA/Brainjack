@@ -17,7 +17,9 @@ public abstract class AbstractTest {
 	private String execute(String commands) throws IOException {
 		try {
 			return execute(commands, new ByteArrayInputStream(new byte[0]));
-		} catch (IOException | IllegalCommandsException e) {
+		} catch (IOException e) {
+			throw e;
+		} catch (IllegalCommandsException e) {
 			throw e;
 		} catch (Throwable e) {
 			throw new RuntimeException(e);
