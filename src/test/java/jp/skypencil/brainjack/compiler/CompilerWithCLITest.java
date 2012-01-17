@@ -22,7 +22,7 @@ import org.junit.rules.TestName;
 
 import com.google.common.io.Files;
 
-public class CompilerTestWithCLI extends AbstractTest {
+public class CompilerWithCLITest extends AbstractTest {
 	private static final String ROOT_DIR_PATH = "target/compilerWithCLI";
 	private static final String CLASS_NAME = "Test";
 	private ByteArrayOutputStream byteArray;

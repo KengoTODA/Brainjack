@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 
-public class InterpreterTestWithCLI extends AbstractTest {
+public class InterpreterWithCLITest extends AbstractTest {
 	private static final String ROOT_DIR_PATH = "target/interpreterWithCLI";
 	private static final String CLASS_NAME = "Test";
 	private ByteArrayOutputStream byteArray;
