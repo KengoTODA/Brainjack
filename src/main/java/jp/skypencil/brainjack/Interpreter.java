@@ -22,6 +22,7 @@ public class Interpreter {
 			Command command = Command.fromByte(byteData);
 			if (command == null) {
 				logger.warning("unknown command: " + Byte.toString(byteData));
+				++context.instructionPointer;
 			} else {
 				command.accept(visitor);
 			}
