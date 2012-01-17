@@ -39,13 +39,18 @@ public abstract class AbstractTest {
 	}
 
 	@Test
+	public void testEmptyLoop() throws IOException {
+		assertThat(execute("[]"), equalTo(""));
+	}
+
+	@Test
 	public void testStartlessLoop() throws IOException {
 		assertThat(execute("]"), equalTo(""));
 	}
 
 	@Test
 	public void testEndlessLoopWithNonZeroData() throws IOException {
-		execute("+[");
+		assertThat(execute("+["), equalTo(""));
 	}
 
 	@Test(expected=IllegalCommandsException.class)
@@ -63,5 +68,11 @@ public abstract class AbstractTest {
 	public void testUpperCase() throws Throwable {
 		InputStream input = new ByteArrayInputStream("abcde".getBytes("UTF-8"));
 		assertThat(execute(",[" + Strings.repeat("-", 32) + ".,]", input), equalTo("ABCDE"));
+	}
+
+	@Test
+	public void testNestedLoops() throws Throwable {
+		InputStream input = new ByteArrayInputStream("hello".getBytes("UTF-8"));
+		assertThat(execute("+++[>+++[>+++[>+++>++<<-]<-]<-]>>>>++++.<-.", input), equalTo(":P"));
 	}
 }
