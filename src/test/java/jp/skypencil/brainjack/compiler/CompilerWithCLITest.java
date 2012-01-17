@@ -24,7 +24,6 @@ import com.google.common.io.Files;
 
 public class CompilerWithCLITest extends AbstractTest {
 	private static final String ROOT_DIR_PATH = "target/compilerWithCLI";
-	private static final String CLASS_NAME = "Test";
 	private ByteArrayOutputStream byteArray;
 	private PrintStream defaultOutput;
 	@Rule
@@ -46,14 +45,14 @@ public class CompilerWithCLITest extends AbstractTest {
 	@Override
 	protected String execute(String commands, InputStream input)
 			throws Throwable {
-		File classFile = new File(ROOT_DIR_PATH, CLASS_NAME + ".class");
+		File classFile = new File(ROOT_DIR_PATH, testName.getMethodName() + ".class");
 		Files.createParentDirs(classFile);
 		classFile.delete();
 
 		assertThat(classFile.exists(), is(false));
-		new Main().run(new String[] { "compile", "-c", commands, "-d", ROOT_DIR_PATH, "-n", CLASS_NAME });
+		new Main().run(new String[] { "compile", "-c", commands, "-d", ROOT_DIR_PATH, "-n", testName.getMethodName() });
 		assertThat(classFile.isFile(), is(true));
-		Class<?> clazz = new OriginalClassLoader().defineClass(CLASS_NAME, Files.toByteArray(classFile));
+		Class<?> clazz = new OriginalClassLoader().defineClass(testName.getMethodName(), Files.toByteArray(classFile));
 		Method method = clazz.getMethod("main", String[].class);
 		assertThat(Modifier.isStatic(method.getModifiers()), is(true));
 		assertThat(Modifier.isPublic(method.getModifiers()), is(true));
