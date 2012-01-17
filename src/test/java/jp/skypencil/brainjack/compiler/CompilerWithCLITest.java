@@ -62,6 +62,7 @@ public class CompilerWithCLITest extends AbstractTest {
 		System.setIn(input);
 		try {
 			method.invoke(null, new Object[] { new String[]{ } });
+			System.out.flush();
 		} catch (InvocationTargetException e) {
 			throw e.getCause();
 		} finally {
