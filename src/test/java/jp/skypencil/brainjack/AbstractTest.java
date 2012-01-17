@@ -75,4 +75,13 @@ public abstract class AbstractTest {
 		InputStream input = new ByteArrayInputStream("hello".getBytes("UTF-8"));
 		assertThat(execute("+++[>+++[>+++[>+++>++<<-]<-]<-]>>>>++++.<-.", input), equalTo(":P"));
 	}
+
+	@Test(timeout=1000)
+	public void testROT13() throws Throwable {
+		// ROT14 program from Wikipedia
+		// http://en.wikipedia.org/wiki/Brainfuck#ROT13
+		String program = "rot13:-,+[-[>>++++[>++++++++<-]<+<-[>+>+>-[>>>]<[[>+<-]>>+>]<<<<<-]]>>>[-]+>--[-[<->+++[-]]]<[++++++++++++<[>-[>+>>]>[+[<+>-]>+>>]<<<<<-]>>[<+>-]>[-[-<<[-]>>]<<[<<->>-]>>]<<[<<+>>-]]<[-]<.[-]<-,+]";
+		InputStream input = new ByteArrayInputStream("HELLO".getBytes("UTF-8"));
+		assertThat(execute(program, input), equalTo("URYYB"));
+	}
 }
