@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 
+import com.google.common.io.CountingOutputStream;
 import com.google.common.io.Files;
 
 public class CompilerWithCLITest extends AbstractTest {
@@ -28,12 +29,14 @@ public class CompilerWithCLITest extends AbstractTest {
 	private PrintStream defaultOutput;
 	@Rule
 	public TestName testName = new TestName();
+	private CountingOutputStream countingStream;
 
 	@Before
 	public void switchOutput() {
 		byteArray = new ByteArrayOutputStream();
-		PrintStream stream = new PrintStream(byteArray);
 		defaultOutput = System.out;
+		countingStream = new CountingOutputStream(byteArray);
+		PrintStream stream = new PrintStream(countingStream);
 		System.setOut(stream);
 	}
 
@@ -67,7 +70,7 @@ public class CompilerWithCLITest extends AbstractTest {
 		} finally {
 			System.setIn(defaultInput);
 		}
-		return byteArray.toString("UTF-8");
+		return new String(byteArray.toByteArray(), 0, (int) countingStream.getCount(), "UTF-8");
 	}
 
 	private static class OriginalClassLoader extends ClassLoader {
