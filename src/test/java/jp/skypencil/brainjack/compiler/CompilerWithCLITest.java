@@ -41,6 +41,8 @@ public class CompilerWithCLITest extends AbstractTest {
 		countingStream = new CountingOutputStream(byteArray);
 		PrintStream stream = new PrintStream(countingStream);
 		System.setOut(stream);
+		
+		new File(ROOT_DIR_PATH).mkdir();
 	}
 
 	@After
