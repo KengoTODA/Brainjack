@@ -48,14 +48,15 @@ public class CompilerWithCLITest extends AbstractTest {
 	@Override
 	protected String execute(String commands, InputStream input)
 			throws Throwable {
-		File classFile = new File(ROOT_DIR_PATH, testName.getMethodName() + ".class");
+		String className = "pkg.withcli." + testName.getMethodName();
+		File classFile = new File(ROOT_DIR_PATH, className.replaceAll("\\.", "/") + ".class");
 		Files.createParentDirs(classFile);
 		classFile.delete();
 
 		assertThat(classFile.exists(), is(false));
-		new Main().run(new String[] { "compile", "-c", commands, "-d", ROOT_DIR_PATH, "-n", testName.getMethodName() });
+		new Main().run(new String[] { "compile", "-c", commands, "-d", ROOT_DIR_PATH, "-n", className });
 		assertThat(classFile.isFile(), is(true));
-		Class<?> clazz = new OriginalClassLoader().defineClass(testName.getMethodName(), Files.toByteArray(classFile));
+		Class<?> clazz = new OriginalClassLoader().defineClass(className, Files.toByteArray(classFile));
 		Method method = clazz.getMethod("main", String[].class);
 		assertThat(Modifier.isStatic(method.getModifiers()), is(true));
 		assertThat(Modifier.isPublic(method.getModifiers()), is(true));
@@ -71,11 +72,5 @@ public class CompilerWithCLITest extends AbstractTest {
 			System.setIn(defaultInput);
 		}
 		return new String(byteArray.toByteArray(), 0, (int) countingStream.getCount(), "UTF-8");
-	}
-
-	private static class OriginalClassLoader extends ClassLoader {
-		public Class<?> defineClass(String name, byte[] b) {
-			return defineClass(name, b, 0, b.length);
-		}
 	}
 }

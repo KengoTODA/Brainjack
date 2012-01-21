@@ -42,17 +42,17 @@ public class InterpreterVisitor implements Visitor {
 
 	@Override
 	public void visit(Accept accept) throws IOException {
-		byte data = (byte) context.input.read();
-		if (data == -1) {
-			data = 0;
-		}
-		context.array[context.dataPointer] = data;
+		int data = context.input.read();
+		context.array[context.dataPointer] = (byte) data;
 		context.instructionPointer++;
 	}
 
 	@Override
 	public void visit(Output output) throws IOException {
-		byte data = context.array[context.dataPointer];
+		int data = context.array[context.dataPointer];
+		if (data < 0) {
+			data += 256;
+		}
 		context.output.write(data);
 		context.instructionPointer++;
 	}

@@ -24,7 +24,7 @@ import com.google.common.io.Files;
 
 public class CompilerTest extends AbstractTest {
 
-	private static final String DUMMY_CLASS_NAME = "pkg.CompiledClass";
+	private static final String PACKAGE_NAME = "pkg.";
 	private ByteArrayOutputStream byteArray;
 	private PrintStream defaultOutput;
 	@Rule
@@ -47,12 +47,12 @@ public class CompilerTest extends AbstractTest {
 	protected String execute(String commands, InputStream input)
 			throws Throwable {
 		Compiler compiler = new Compiler();
-		byte[] binary = compiler.compile(commands, DUMMY_CLASS_NAME);
+		byte[] binary = compiler.compile(commands, PACKAGE_NAME + testName.getMethodName());
 
 		// for javap debug
 		Files.write(binary, new File("target", testName.getMethodName() + ".class"));
 
-		Class<?> clazz = new OriginalClassLoader().defineClass(DUMMY_CLASS_NAME, binary);
+		Class<?> clazz = new OriginalClassLoader().defineClass(PACKAGE_NAME + testName.getMethodName(), binary);
 		Method method = clazz.getMethod("main", String[].class);
 		assertThat(Modifier.isStatic(method.getModifiers()), is(true));
 		assertThat(Modifier.isPublic(method.getModifiers()), is(true));
@@ -68,9 +68,4 @@ public class CompilerTest extends AbstractTest {
 		}
 		return byteArray.toString("UTF-8");
 	}
-
-	private static class OriginalClassLoader extends ClassLoader {
-		public Class<?> defineClass(String name, byte[] b) {
-			return defineClass(name, b, 0, b.length);
-		}
-	}}
+}

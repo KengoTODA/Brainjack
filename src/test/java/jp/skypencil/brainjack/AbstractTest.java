@@ -61,13 +61,13 @@ public abstract class AbstractTest {
 	@Test
 	public void testReverse() throws Throwable {
 		InputStream input = new ByteArrayInputStream("abcde".getBytes("UTF-8"));
-		assertThat(execute(">,[>,]<[.<]", input), equalTo("edcba"));
+		assertThat(execute(">,+[->,+]<[.<]", input), equalTo("edcba"));
 	}
 
 	@Test
 	public void testUpperCase() throws Throwable {
 		InputStream input = new ByteArrayInputStream("abcde".getBytes("UTF-8"));
-		assertThat(execute(",[" + Strings.repeat("-", 32) + ".,]", input), equalTo("ABCDE"));
+		assertThat(execute(",+[-" + Strings.repeat("-", 32) + ".,+]", input), equalTo("ABCDE"));
 	}
 
 	@Test
