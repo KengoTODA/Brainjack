@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
@@ -18,7 +19,9 @@ import jp.skypencil.brainjack.Main;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.TestName;
+import org.kohsuke.args4j.CmdLineException;
 
 import com.google.common.io.CountingOutputStream;
 import com.google.common.io.Files;
@@ -72,5 +75,25 @@ public class CompilerWithCLITest extends AbstractTest {
 			System.setIn(defaultInput);
 		}
 		return new String(byteArray.toByteArray(), 0, (int) countingStream.getCount(), "UTF-8");
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testWithoutClassName() throws CmdLineException, IOException {
+		new Main().run(new String[]{"compile", "-c", "", "-d", ROOT_DIR_PATH});
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testWithWrongDirectory() throws CmdLineException, IOException {
+		File file = new File(ROOT_DIR_PATH, "file");
+		file.createNewFile();
+		new Main().run(new String[]{"compile", "-c", "", "-d", file.getAbsolutePath(), "-n", "pkg.ClassName" });
+	}
+
+	@Test
+	public void testWithoutPackage() throws CmdLineException, IOException {
+		File classFile = new File(ROOT_DIR_PATH, "ClassName.class");
+		classFile.delete();
+		new Main().run(new String[]{"compile", "-c", "", "-d", ROOT_DIR_PATH, "-n", "ClassName" });
+		assertThat(classFile.exists(), is(true));
 	}
 }
