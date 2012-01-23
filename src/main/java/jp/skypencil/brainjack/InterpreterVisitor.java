@@ -91,7 +91,7 @@ public class InterpreterVisitor implements Visitor {
 		while (counter > 0) {
 			context.instructionPointer++;
 			if (context.instructionPointer >= commands.length) {
-				throw new IllegalCommandsException("illegal pair of '[' and ']'");
+				throw new IllegalArgumentException("illegal pair of '[' and ']'");
 			}
 
 			switch ((char) commands[context.instructionPointer]) {
@@ -108,7 +108,7 @@ public class InterpreterVisitor implements Visitor {
 		while (counter > 0) {
 			context.instructionPointer--;
 			if (context.instructionPointer < 0) {
-				throw new IllegalCommandsException("illegal pair of '[' and ']'");
+				throw new IllegalArgumentException("illegal pair of '[' and ']'");
 			}
 
 			switch ((char) commands[context.instructionPointer]) {

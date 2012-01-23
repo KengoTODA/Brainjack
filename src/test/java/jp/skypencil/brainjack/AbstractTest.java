@@ -19,7 +19,7 @@ public abstract class AbstractTest {
 			return execute(commands, new ByteArrayInputStream(new byte[0]));
 		} catch (IOException e) {
 			throw e;
-		} catch (IllegalCommandsException e) {
+		} catch (IllegalArgumentException e) {
 			throw e;
 		} catch (Throwable e) {
 			throw new RuntimeException(e);
@@ -33,7 +33,7 @@ public abstract class AbstractTest {
 		assertThat(execute(CMD_HELLO_WORLD), equalTo("Hello, world!"));
 	}
 
-	@Test(expected=IllegalCommandsException.class)
+	@Test(expected=IllegalArgumentException.class)
 	public void testEndlessLoop() throws IOException {
 		execute("[");
 	}
@@ -53,7 +53,7 @@ public abstract class AbstractTest {
 		assertThat(execute("+["), equalTo(""));
 	}
 
-	@Test(expected=IllegalCommandsException.class)
+	@Test(expected=IllegalArgumentException.class)
 	public void testStartlessLoopWithNonZeroData() throws IOException {
 		execute("+]");
 	}

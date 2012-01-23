@@ -94,10 +94,10 @@ class CompilerVisitor implements Visitor {
 			Label walkThrough = new Label();
 			// throw IllegalCommandsException because there is no label to return
 			methodVisitor.visitJumpInsn(IFEQ, walkThrough);
-			methodVisitor.visitTypeInsn(NEW, Type.getInternalName(IllegalCommandsException.class));
+			methodVisitor.visitTypeInsn(NEW, Type.getInternalName(IllegalArgumentException.class));
 			methodVisitor.visitInsn(DUP);
 			methodVisitor.visitLdcInsn("illegal pair of '[' and ']'");
-			methodVisitor.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(IllegalCommandsException.class), "<init>", "(Ljava/lang/String;)V");
+			methodVisitor.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(IllegalArgumentException.class), "<init>", "(Ljava/lang/String;)V");
 			methodVisitor.visitInsn(ATHROW);
 			methodVisitor.visitLabel(walkThrough);
 		} else {
@@ -176,10 +176,10 @@ class CompilerVisitor implements Visitor {
 		for (Label label : loopEndLabels) {
 			methodVisitor.visitLabel(label);
 		}
-		methodVisitor.visitTypeInsn(NEW, Type.getInternalName(IllegalCommandsException.class));
+		methodVisitor.visitTypeInsn(NEW, Type.getInternalName(IllegalArgumentException.class));
 		methodVisitor.visitInsn(DUP);
 		methodVisitor.visitLdcInsn("illegal pair of '[' and ']'");
-		methodVisitor.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(IllegalCommandsException.class), "<init>", "(Ljava/lang/String;)V");
+		methodVisitor.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(IllegalArgumentException.class), "<init>", "(Ljava/lang/String;)V");
 		methodVisitor.visitInsn(ATHROW);
 		methodVisitor.visitMaxs(100, 100);
 		methodVisitor.visitEnd();
