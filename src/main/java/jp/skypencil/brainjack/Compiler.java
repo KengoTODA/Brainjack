@@ -29,6 +29,7 @@ public class Compiler {
 		String innerFullClassName = classFullName.replaceAll("\\.", "/");
 		String className = classFullName;
 
+		logger.info("start to compile: " + classFullName);
 		if (className.contains(".")) {
 			className = className.substring(className.lastIndexOf('.') + 1);
 		}

@@ -3,6 +3,7 @@ package jp.skypencil.brainjack;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
 
@@ -15,6 +16,7 @@ import com.google.common.io.Files;
 public class Main {
 	private static final int STATUS_CODE_OK = 0;
 	private static final int STATUS_CODE_ERROR = 9;
+	private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
 	private CmdLineParser parser;
 
@@ -67,6 +69,7 @@ public class Main {
 					byte[] binary = new Compiler().compile(option.getCommands(), option.getClassName());
 					File classFile = new File(option.getOutputRootDirectory(), option.getClassName().replace('.', '/').concat(".class"));
 					Files.write(binary, classFile);
+					LOGGER.info("finish writing to: " + classFile.getAbsolutePath());
 				}
 				break;
 			default:
