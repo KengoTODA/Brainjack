@@ -9,7 +9,6 @@ import static org.objectweb.asm.Opcodes.BASTORE;
 import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.DUP2;
 import static org.objectweb.asm.Opcodes.GETSTATIC;
-import static org.objectweb.asm.Opcodes.I2B;
 import static org.objectweb.asm.Opcodes.IADD;
 import static org.objectweb.asm.Opcodes.ICONST_0;
 import static org.objectweb.asm.Opcodes.ICONST_1;
@@ -46,10 +45,10 @@ import org.objectweb.asm.Type;
 import com.google.common.collect.Lists;
 
 class CompilerVisitor implements Visitor {
-	private final MethodVisitor methodVisitor;
-	private final String innerFullClassName;
-	private Deque<Label> loopBeginLabels = Lists.newLinkedList();
-	private Deque<Label> loopEndLabels = Lists.newLinkedList();
+	private @Nonnull final MethodVisitor methodVisitor;
+	private @Nonnull final String innerFullClassName;
+	private @Nonnull Deque<Label> loopBeginLabels = Lists.newLinkedList();
+	private @Nonnull Deque<Label> loopEndLabels = Lists.newLinkedList();
 	private static final String DATA_POINTER = "_dataPointer";
 	private static final String DATA_POINTER_TYPE = Type.INT_TYPE.getDescriptor();
 	private static final String DATA_ARRAY = "_dataArray";
@@ -66,7 +65,8 @@ class CompilerVisitor implements Visitor {
 		this.methodVisitor.visitFieldInsn(PUTSTATIC, innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
 	}
 
-	void createField(ClassVisitor classVisitor) {
+	void createField(@Nonnull ClassVisitor classVisitor) {
+		checkNotNull(classVisitor);
 		classVisitor.visitField(ACC_PUBLIC | ACC_STATIC, DATA_POINTER, DATA_POINTER_TYPE, null, 0).visitEnd();
 		classVisitor.visitField(ACC_PUBLIC | ACC_STATIC, DATA_ARRAY, DATA_ARRAY_TYPE, null, null).visitEnd();
 	}
@@ -112,7 +112,6 @@ class CompilerVisitor implements Visitor {
 		methodVisitor.visitFieldInsn(GETSTATIC, this.innerFullClassName, DATA_POINTER, DATA_POINTER_TYPE);
 		methodVisitor.visitFieldInsn(GETSTATIC, "java/lang/System", "in", Type.getDescriptor(InputStream.class));
 		methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/io/InputStream", "read", "()I");
-		methodVisitor.visitInsn(I2B);
 		methodVisitor.visitInsn(BASTORE);
 	}
 
@@ -142,7 +141,6 @@ class CompilerVisitor implements Visitor {
 		methodVisitor.visitInsn(BALOAD);
 		methodVisitor.visitLdcInsn(-1);
 		methodVisitor.visitInsn(IADD);
-		methodVisitor.visitInsn(I2B);
 		methodVisitor.visitInsn(BASTORE);
 	}
 
@@ -154,7 +152,6 @@ class CompilerVisitor implements Visitor {
 		methodVisitor.visitInsn(BALOAD);
 		methodVisitor.visitInsn(ICONST_1);
 		methodVisitor.visitInsn(IADD);
-		methodVisitor.visitInsn(I2B);
 		methodVisitor.visitInsn(BASTORE);
 	}
 

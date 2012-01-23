@@ -42,7 +42,9 @@ public class Compiler {
 		return cw.toByteArray();
 	}
 
-	private void createConstructor(ClassWriter cw, String innerFullClassName) {
+	private void createConstructor(@Nonnull ClassWriter cw, @Nonnull String innerFullClassName) {
+		assert cw != null;
+		assert innerFullClassName != null;
 		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
 		mv.visitMaxs(1, 1);
 		mv.visitVarInsn(ALOAD, 0); // push `this` to the operand stack
@@ -52,8 +54,11 @@ public class Compiler {
 		mv.visitEnd();
 	}
 
-	private void createMain(ClassWriter cw, String commands,
-			String innerFullClassName) {
+	private void createMain(@Nonnull ClassWriter cw, @Nonnull String commands,
+			@Nonnull String innerFullClassName) {
+		assert cw != null;
+		assert commands != null;
+		assert innerFullClassName != null;
 		MethodVisitor mv = cw.visitMethod(
 				ACC_PUBLIC | ACC_STATIC,
 				"main",
@@ -66,8 +71,11 @@ public class Compiler {
 		visitor.end();
 	}
 
-	private void createCommands(CompilerVisitor visitor, String commands,
-			String innerFullClassName) {
+	private void createCommands(@Nonnull CompilerVisitor visitor, @Nonnull String commands,
+			@Nonnull String innerFullClassName) {
+		assert visitor != null;
+		assert commands != null;
+		assert innerFullClassName != null;
 		for (byte byteData : commands.getBytes(Charsets.UTF_8)) {
 			Command command = Command.fromByte(byteData);
 			if (command == null) {

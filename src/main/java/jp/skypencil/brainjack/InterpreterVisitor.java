@@ -2,6 +2,8 @@ package jp.skypencil.brainjack;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
+
 import jp.skypencil.brainjack.Command.Accept;
 import jp.skypencil.brainjack.Command.DecrementData;
 import jp.skypencil.brainjack.Command.DecrementDataPointer;
@@ -10,14 +12,15 @@ import jp.skypencil.brainjack.Command.IncrementData;
 import jp.skypencil.brainjack.Command.IncrementDataPointer;
 import jp.skypencil.brainjack.Command.Output;
 import jp.skypencil.brainjack.Command.StartLoop;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static jp.skypencil.brainjack.Command.CHAR_START_LOOP;
 import static jp.skypencil.brainjack.Command.CHAR_END_LOOP;
 
 public class InterpreterVisitor implements Visitor {
 	private final Context context;
 
-	InterpreterVisitor(Context context) {
-		this.context = context;
+	InterpreterVisitor(@Nonnull Context context) {
+		this.context = checkNotNull(context);
 	}
 
 	@Override
@@ -81,7 +84,8 @@ public class InterpreterVisitor implements Visitor {
 		context.instructionPointer++;
 	}
 
-	private void jumpForward(Context context) {
+	private void jumpForward(@Nonnull Context context) {
+		assert context != null;
 		int counter = 1;
 		byte[] commands = context.commands;
 		while (counter > 0) {
@@ -97,7 +101,8 @@ public class InterpreterVisitor implements Visitor {
 		}
 	}
 
-	private void jumpBack(Context context) {
+	private void jumpBack(@Nonnull Context context) {
+		assert context != null;
 		int counter = 1;
 		byte[] commands = context.commands;
 		while (counter > 0) {
